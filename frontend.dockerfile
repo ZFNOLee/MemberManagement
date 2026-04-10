@@ -10,8 +10,8 @@ COPY frontend/ /usr/share/nginx/html/fuintAdmin/
 COPY frontend/nginx.template.conf /etc/nginx/nginx.template
 
 # 复制启动脚本
-COPY frontend/entrypoint.sh /docker-entrypoint.d/40-envsubst-config.sh
-RUN chmod +x /docker-entrypoint.d/40-envsubst-config.sh
+COPY frontend/start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Railway 默认端口
 ENV PORT=8080
@@ -19,4 +19,5 @@ ENV BACKEND_URL=http://127.0.0.1:8080
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+# 先渲染配置，再启动 nginx
+CMD ["/start.sh"]
